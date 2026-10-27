@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP Research Agent</title>
+  <meta name="description" content="AI research assistant powered by MCP tools and a LangGraph agent">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232f6fed'/%3E%3Cpath d='M9 22V10l7 7 7-7v12' stroke='white' stroke-width='3' fill='none' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn only-mobile" id="toggle-sidebar" aria-label="Toggle sidebar">☰</button>
+    <div class="brand"><span class="logo" aria-hidden="true">M</span> MCP Research Agent</div>
+    <div class="status" id="status" role="status">Checking…</div>
+    <button class="btn ghost" id="open-key">API key</button>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <section>
+        <div class="section-head"><h2>Conversations</h2><button class="btn small" id="new-chat">New</button></div>
+        <ul class="conversations" id="conversations"></ul>
+      </section>
+
+      <section>
+        <h2>Upload PDF</h2>
+        <label class="dropzone" for="pdf-input">
+          <input type="file" id="pdf-input" accept="application/pdf,.pdf">
+          <span>Choose a PDF to index</span>
+        </label>
+        <div class="notice" id="pdf-status" hidden></div>
+        <ul class="files" id="documents"></ul>
+      </section>
+
+      <section>
+        <h2>Upload experiment log</h2>
+        <label class="dropzone" for="exp-input">
+          <input type="file" id="exp-input" accept=".csv,.json,text/csv,application/json">
+          <span>Choose a CSV or JSON file</span>
+        </label>
+        <div class="notice" id="exp-status" hidden></div>
+        <ul class="files" id="experiments"></ul>
+      </section>
+
+      <section>
+        <h2>MCP tools</h2>
+        <ul class="tools" id="tools"><li class="muted">Loading…</li></ul>
+      </section>
+    </aside>
+
+    <main class="chat">
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="empty" id="empty">
+          <h1>What would you like to research?</h1>
+          <p class="muted">The agent discovers and calls MCP tools to search arXiv, analyze GitHub repositories,
+            answer questions from your PDFs, compare experiment logs, and write cited reports.</p>
+          <div class="examples" id="examples">
+            <button class="example">Find recent papers on graph neural networks for molecular property prediction</button>
+            <button class="example">Analyze the GitHub repository pyg-team/pytorch_geometric and summarize its architecture</button>
+            <button class="example">According to my uploaded PDF, what limitations of message passing are discussed?</button>
+            <button class="example">Compare the uploaded GCN and GAT experiments on validation accuracy and loss</button>
+            <button class="example">Generate a cited report comparing my experiments, with related arXiv work on GNNs</button>
+          </div>
+        </div>
+      </div>
+      <form class="composer" id="composer">
+        <textarea id="input" rows="2" maxlength="4000" placeholder="Ask a research question…" required></textarea>
+        <button class="btn primary" id="send" type="submit">Send</button>
+      </form>
+    </main>
+  </div>
+
+  <dialog id="key-dialog">
+    <form method="dialog" id="key-form">
+      <h2>API key</h2>
+      <p class="muted">Required when the server sets APP_API_KEY. Stored only in this browser.</p>
+      <input type="password" id="key-input" autocomplete="off" placeholder="APP_API_KEY">
+      <div class="dialog-actions">
+        <button class="btn ghost" type="button" id="key-cancel">Cancel</button>
+        <button class="btn primary" value="save" id="key-save">Save</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

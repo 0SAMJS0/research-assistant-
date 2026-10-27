@@ -1,0 +1,68 @@
+[project]
+name = "mcp-research-agent"
+version = "1.0.0"
+description = "AI research assistant built on real MCP tools, a LangGraph agent, RAG over PDFs, arXiv/GitHub integrations, experiment analysis and cited report generation."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "mcp==2.3.0",
+    "fastmcp==4.1.4",
+    "langgraph==1.2.18",
+    "langchain[mcp,openai]==1.4.7",
+    "langchain-core==1.7.0",
+    "langchain-openai==1.7.3",
+    "fastapi==0.162.0",
+    "uvicorn[standard]==0.54.0",
+    "chromadb==1.5.9",
+    "httpx==0.28.1",
+    "pypdf==6.21.2",
+    "pandas==3.1.0",
+    "pydantic==2.14.1",
+    "pydantic-settings==2.16.1",
+    "python-multipart==0.0.32",
+    "markdown-it-py==4.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.1",
+    "respx==0.23.1",
+    "ruff==0.17.2",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = [".venv", "data", "reports"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC", "RUF", "SIM"]
+ignore = ["S101", "B008", "RUF012", "S311"]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S108", "S603", "S607", "E501"]
+"scripts/**" = ["S603", "S607", "E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+    "live: tests that call live external APIs (arXiv, GitHub, OpenAI); opt-in with RUN_LIVE_TESTS=1",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore:.*langchain.mcp.*:Warning",
+]

@@ -1,0 +1,33 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Runtime data: uploads, vector database, generated reports
+data/*
+!data/samples/
+chroma/
+chroma_data/
+*.sqlite3
+reports/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

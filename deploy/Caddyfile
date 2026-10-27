@@ -1,0 +1,24 @@
+{$DOMAIN} {
+	encode zstd gzip
+
+	# Uploads are capped in the app (MAX_UPLOAD_MB); this is a coarse outer limit.
+	request_body {
+		max_size 64MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+
+	# REST API, web UI and the MCP Streamable HTTP endpoint (/mcp) are all served by the api container.
+	reverse_proxy api:8000 {
+		# Chat requests can run up to AGENT_REQUEST_TIMEOUT_S.
+		transport http {
+			read_timeout 240s
+			write_timeout 240s
+		}
+		# Keep MCP server-sent events unbuffered.
+		flush_interval -1
+	}
+}

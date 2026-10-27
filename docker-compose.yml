@@ -1,0 +1,78 @@
+# Production-style stack: API + web UI (port 8000), standalone MCP tool server, and a private ChromaDB server.
+#   cp .env.example .env   # then edit secrets
+#   docker compose up --build -d
+name: mcp-research-agent
+
+x-app: &app
+  build: .
+  image: mcp-research-agent:latest
+  env_file: .env
+  restart: unless-stopped
+  read_only: true
+  tmpfs: [/tmp]
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: [ALL]
+  volumes:
+    - app-data:/data
+  networks: [backend]
+
+services:
+  chroma:
+    image: chromadb/chroma:1.5.9
+    restart: unless-stopped
+    environment:
+      ANONYMIZED_TELEMETRY: "False"
+    volumes:
+      - chroma-data:/data
+    networks: [backend]
+    # Not published: ChromaDB is reachable only on the internal network.
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000 && printf 'GET /api/v2/heartbeat HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q ' 200 ' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  mcp:
+    <<: *app
+    command: ["python", "-m", "app.mcp_server"]
+    environment:
+      CHROMA_MODE: http
+      CHROMA_HOST: chroma
+      CHROMA_PORT: "8000"
+      DATA_DIR: /data/app
+      REPORTS_DIR: /data/reports
+      MCP_PORT: "8100"
+      HEALTH_PORT: "8100"
+      MCP_BASE_URL: http://mcp:8100/mcp
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS:-localhost,127.0.0.1},mcp"
+    depends_on:
+      chroma:
+        condition: service_healthy
+
+  api:
+    <<: *app
+    ports:
+      - "${API_BIND:-127.0.0.1}:${API_PORT:-8000}:8000"
+    environment:
+      CHROMA_MODE: http
+      CHROMA_HOST: chroma
+      CHROMA_PORT: "8000"
+      DATA_DIR: /data/app
+      REPORTS_DIR: /data/reports
+      HEALTH_PORT: "8000"
+      # The agent reaches tools only through the MCP service over Streamable HTTP.
+      MCP_BASE_URL: http://mcp:8100/mcp
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS:-localhost,127.0.0.1},api"
+    depends_on:
+      chroma:
+        condition: service_healthy
+      mcp:
+        condition: service_healthy
+
+volumes:
+  chroma-data:
+  app-data:
+
+networks:
+  backend:

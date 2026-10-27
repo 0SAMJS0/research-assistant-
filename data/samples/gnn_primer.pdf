@@ -1,0 +1,146 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 1065 >>
+stream
+BT
+/F1 16 Tf
+72 740 Td
+(A Short Primer on Graph Neural Networks) Tj
+/F1 11 Tf
+0 -28 Td
+(Synthetic sample document written for the MCP Research Agent demo. MIT licensed.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(1. Introduction) Tj
+0 -16 Td
+(Graph neural networks \(GNNs\) learn representations of nodes, edges and whole graphs by) Tj
+0 -16 Td
+(repeatedly exchanging information between neighbouring nodes. This process is called) Tj
+0 -16 Td
+(message passing. In each layer, every node aggregates messages from its neighbours,) Tj
+0 -16 Td
+(combines them with its own state, and applies a learned transformation.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(2. Graph Convolutional Networks) Tj
+0 -16 Td
+(A graph convolutional network \(GCN\) averages neighbour features using a symmetric) Tj
+0 -16 Td
+(normalisation based on node degrees, followed by a linear layer and a non-linearity.) Tj
+0 -16 Td
+(Because every neighbour is weighted by a fixed coefficient, GCN layers are cheap to) Tj
+0 -16 Td
+(compute and work well on homophilous graphs where connected nodes share labels.) Tj
+0 -16 Td
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 845 >>
+stream
+BT
+/F1 16 Tf
+72 740 Td
+(Attention and Sampling) Tj
+/F1 11 Tf
+0 -28 Td
+(3. Graph Attention Networks) Tj
+0 -16 Td
+(A graph attention network \(GAT\) replaces the fixed coefficients of a GCN with learned) Tj
+0 -16 Td
+(attention weights. Each node scores its neighbours with a small attention function and) Tj
+0 -16 Td
+(normalises the scores with a softmax. Multiple attention heads are usually concatenated) Tj
+0 -16 Td
+(or averaged. Attention lets the model down-weight noisy or irrelevant neighbours.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(4. Neighbourhood Sampling) Tj
+0 -16 Td
+(GraphSAGE-style models sample a fixed number of neighbours per node instead of using the) Tj
+0 -16 Td
+(full neighbourhood. Sampling bounds memory use on very large graphs and enables) Tj
+0 -16 Td
+(inductive learning on nodes that were not seen during training.) Tj
+0 -16 Td
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 9 0 R /Resources << /Font << /F1 3 0 R >> >> >>
+endobj
+9 0 obj
+<< /Length 1026 >>
+stream
+BT
+/F1 16 Tf
+72 740 Td
+(Limitations and Evaluation) Tj
+/F1 11 Tf
+0 -28 Td
+(5. Known Limitations of Message Passing) Tj
+0 -16 Td
+(Over-smoothing: as more layers are stacked, node representations become increasingly) Tj
+0 -16 Td
+(similar, which hurts classification accuracy in deep GNNs.) Tj
+0 -16 Td
+(Over-squashing: information from distant nodes must pass through narrow bottlenecks,) Tj
+0 -16 Td
+(so long-range dependencies are compressed into fixed-size vectors.) Tj
+0 -16 Td
+(Expressiveness: standard message passing is at most as powerful as the 1-WL graph) Tj
+0 -16 Td
+(isomorphism test, so some non-isomorphic graphs cannot be distinguished.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(6. Evaluation Practice) Tj
+0 -16 Td
+(Results on small citation benchmarks vary noticeably with the random seed. Reports should) Tj
+0 -16 Td
+(therefore give the mean and standard deviation over several seeds, state whether lower) Tj
+0 -16 Td
+(or higher values of each metric are better, and use the same data splits for every model.) Tj
+0 -16 Td
+ET
+endstream
+endobj
+10 0 obj
+<< /Title (A Short Primer on Graph Neural Networks) /Producer (mcp-research-agent sample generator) >>
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000127 00000 n 
+0000000197 00000 n 
+0000000323 00000 n 
+0000001440 00000 n 
+0000001566 00000 n 
+0000002462 00000 n 
+0000002588 00000 n 
+0000003666 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R /Info 10 0 R >>
+startxref
+3785
+%%EOF

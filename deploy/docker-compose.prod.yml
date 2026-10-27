@@ -1,0 +1,33 @@
+# Production override: adds Caddy as the TLS-terminating reverse proxy with automatic HTTPS (Let's Encrypt).
+# Works on any Docker host (a VM on AWS, GCP, Azure, DigitalOcean, Hetzner, ...).
+#
+#   DOMAIN=research.example.com docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d --build
+#
+# In .env set: APP_ENV=production, PUBLIC_BASE_URL=https://$DOMAIN, ALLOWED_HOSTS=$DOMAIN,
+#              ALLOWED_ORIGINS=https://$DOMAIN, strong APP_API_KEY / MCP_AUTH_TOKEN.
+services:
+  api:
+    # Only Caddy talks to the API; nothing is published on the host.
+    ports: !reset []
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN to your public hostname}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [backend]
+
+volumes:
+  caddy-data:
+  caddy-config:
